@@ -1,6 +1,5 @@
-package org.example;
+package org.example.stringadder;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -11,7 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class StringAdderTest {
 
-    private final StringAdder adder = new StringAdder();
+    private static final Display NO_OP_DISPLAY = message -> {
+    };
+
+    private final StringAdder adder = new StringAdder(NO_OP_DISPLAY);
 
     @ParameterizedTest
     @NullAndEmptySource
@@ -62,5 +64,35 @@ class StringAdderTest {
     void add_negativeNumber_throwsNegativeNumberException(String input, String output) {
         Throwable exception = assertThrows(NegativeNumberException.class, () -> adder.add(input));
         assertEquals("Negative numbers are not allowed: " + output, exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'1,2', '1 + 2 = 3'",
+            "'1,2,3', '1 + 2 + 3 = 6'",
+            "'//;\n1;2', '1 + 2 = 3'",
+    })
+    void add_validInput_displaysOperandsJoinedWithPlusAndSum(String input, String expectedDisplay)
+            throws NegativeNumberException {
+        CapturingDisplay display = new CapturingDisplay();
+        StringAdder calculator = new StringAdder(display);
+
+        calculator.add(input);
+
+        assertEquals(expectedDisplay, display.lastMessage());
+    }
+
+    /** Test double: records the last message passed to {@link Display#show(String)}. */
+    private static final class CapturingDisplay implements Display {
+        private String lastMessage;
+
+        @Override
+        public void show(String message) {
+            this.lastMessage = message;
+        }
+
+        String lastMessage() {
+            return lastMessage;
+        }
     }
 }

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.stringadder;
 
 public class NegativeNumberException extends Exception{
     public NegativeNumberException() {

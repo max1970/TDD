@@ -1,12 +1,19 @@
-package org.example;
+package org.example.stringadder;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Sums comma-separated integers in a string. Empty or blank input sums to 0.
  */
 public class StringAdder {
+
+    private final Display display;
+
+    public StringAdder(Display display) {
+        this.display = display;
+    }
 
     public int add(String numbers) throws NegativeNumberException {
         if (numbers == null || numbers.isBlank()) {
@@ -26,24 +33,28 @@ public class StringAdder {
                 .filter(s -> !s.isEmpty())
                 .toArray(String[]::new);
 
-        for(String token: tokens) {
-            if(token.trim().startsWith("-")) {
+        for (String token : tokens) {
+            if (token.trim().startsWith("-")) {
                 throw new NegativeNumberException("Negative numbers are not allowed: " + token.trim());
             }
         }
 
-        if(tokens[0].trim().startsWith("-")) {
+        if (tokens[0].trim().startsWith("-")) {
             throw new NegativeNumberException("Negative numbers are not allowed: " + tokens[0].trim());
         }
 
-        if (tokens.length == 1) {
-            String trimmed = tokens[0].trim();
-            return Integer.parseInt(trimmed);
-        } else {
-            return Arrays.stream(tokens)
+        int sum = Arrays.stream(tokens)
+                .map(String::trim)
+                .mapToInt(Integer::parseInt)
+                .sum();
+
+        if (tokens.length >= 2) {
+            String operandsJoined = Arrays.stream(tokens)
                     .map(String::trim)
-                    .mapToInt(Integer::parseInt)
-                    .sum();
+                    .collect(Collectors.joining(" + "));
+            display.show(operandsJoined + " = " + sum);
         }
+
+        return sum;
     }
 }
