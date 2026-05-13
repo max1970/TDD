@@ -40,6 +40,27 @@ class FractionAdderTest {
     }
 
     @Nested
+    @DisplayName("Whole numbers (implicit denominator 1)")
+    class WholeNumbers {
+        @Test
+        void adds_two_wholes_via_fraction_constructor() {
+            FractionAdder adder = new FractionAdder(new Fraction(3), new Fraction(12));
+            assertEquals("15", adder.toString());
+        }
+
+        @Test
+        void adds_two_wholes_via_int_constructor() {
+            assertEquals("15", new FractionAdder(3, 12).toString());
+        }
+
+        @Test
+        void adds_whole_and_proper_fraction() {
+            FractionAdder adder = new FractionAdder(new Fraction(2), new Fraction(1, 3));
+            assertEquals("2 1/3", adder.toString());
+        }
+    }
+
+    @Nested
     @DisplayName("Simplification")
     class Simplification {
         @Test

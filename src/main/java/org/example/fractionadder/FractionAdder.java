@@ -9,6 +9,10 @@ public class FractionAdder {
         this.fraction2 = fraction2;
     }
 
+    public FractionAdder(int whole1, int whole2) {
+        this(new Fraction(whole1), new Fraction(whole2));
+    }
+
     public String add() {
         int wholeNumber = 0;
         int denominator1 = fraction1.getDenominator();
@@ -38,5 +42,10 @@ public class FractionAdder {
 
         return ((wholeNumber > 0 ? wholeNumber + "" : "") + " "
                 + (aggregatedNumerators > 0 ? aggregatedNumerators + "/" + commonDenominator : "")).trim();
+    }
+
+    @Override
+    public String toString() {
+        return add();
     }
 }

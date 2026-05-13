@@ -9,6 +9,11 @@ public class Fraction {
         this.denominator = denominator;
     }
 
+    public Fraction(int whole) {
+        this.numerator = whole;
+        this.denominator = 1;
+    }
+
     public int getNumerator() {
         return numerator;
     }
@@ -17,7 +22,11 @@ public class Fraction {
         return denominator;
     }
 
+    @Override
     public String toString() {
+        if (denominator == 1) {
+            return Integer.toString(numerator);
+        }
         return numerator + "/" + denominator;
     }
 }
