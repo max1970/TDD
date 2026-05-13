@@ -1,50 +1,51 @@
 package org.example.fractionadder;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FractionAdderTest {
+class FractionAdderTest {
 
-    @Test
-    public void test_should_add_fraction() {
-        Fraction fraction1 = new Fraction(1,5);
-        Fraction fraction2 = new Fraction(1,5);
-        FractionAdder fractionAdder = new FractionAdder(fraction1, fraction2);
+    @Nested
+    @DisplayName("Same denominator")
+    class SameDenominator {
+        @Test
+        void adds_two_proper_fractions() {
+            FractionAdder adder = new FractionAdder(new Fraction(1, 5), new Fraction(1, 5));
+            assertEquals("2/5", adder.add());
+        }
 
-        assertEquals("2/5", fractionAdder.addFractions(fraction1, fraction2), "Adding fractions");
+        @Test
+        void extracts_whole_part_when_sum_is_improper() {
+            FractionAdder adder = new FractionAdder(new Fraction(3, 5), new Fraction(3, 5));
+            assertEquals("1 1/5", adder.add());
+        }
+
+        @Test
+        void sums_to_exact_whole_with_no_fractional_remainder() {
+            FractionAdder adder = new FractionAdder(new Fraction(2, 5), new Fraction(3, 5));
+            assertEquals("1", adder.add());
+        }
     }
 
-    @Test
-    public void test_should_add_fractions_and_round_whole_number() {
-        Fraction fraction1 = new Fraction(3,5);
-        Fraction fraction2 = new Fraction(3,5);
-        FractionAdder fractionAdder = new FractionAdder(fraction1, fraction2);
-
-        assertEquals("1 1/5", fractionAdder.addFractions(fraction1, fraction2), "Adding fractions to result whole number and fraction");
+    @Nested
+    @DisplayName("Different denominators")
+    class DifferentDenominators {
+        @Test
+        void finds_common_denominator_and_mixed_number() {
+            FractionAdder adder = new FractionAdder(new Fraction(2, 4), new Fraction(3, 5));
+            assertEquals("1 1/10", adder.add());
+        }
     }
 
-    @Test
-    public void should_test_add_fractions_and_round_whole_number_without_remaining_fraction() {
-        Fraction fraction1 = new Fraction(2,5);
-        Fraction fraction2 = new Fraction(3,5);
-        FractionAdder fractionAdder = new FractionAdder(fraction1, fraction2);
-
-        assertEquals("1", fractionAdder.addFractions(fraction1, fraction2), "Adding fractions to result whole number and fraction");
-
-    }
-
-    @Test
-    public void should_test_add_fractions_with_different_denominator() {
-        Fraction fraction1 = new Fraction(2,4);
-        Fraction fraction2 = new Fraction(3,5);
-        FractionAdder fractionAdder = new FractionAdder(fraction1, fraction2);
-
-        assertEquals("1 1/10", fractionAdder.addFractions(fraction1, fraction2), "Adding fractions with different denominator");
-    }
-
-    @Test
-    public void should_test_add_fraction_and_simplify_fraction() {
-
+    @Nested
+    @DisplayName("Simplification")
+    class Simplification {
+        @Test
+        void reduces_result_to_lowest_terms() {
+            FractionAdder adder = new FractionAdder(new Fraction(1, 6), new Fraction(1, 6));
+            assertEquals("1/3", adder.add());
+        }
     }
 }

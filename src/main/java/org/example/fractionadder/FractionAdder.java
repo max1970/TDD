@@ -9,7 +9,7 @@ public class FractionAdder {
         this.fraction2 = fraction2;
     }
 
-    public String addFractions(Fraction fraction1, Fraction fraction2) {
+    public String add() {
         int wholeNumber = 0;
         int denominator1 = fraction1.getDenominator();
         int denominator2 = fraction2.getDenominator();
@@ -18,24 +18,25 @@ public class FractionAdder {
         int aggregatedNumerators = numerator2 + numerator1;
         int commonDenominator = denominator1;
 
-        if(denominator2 != denominator1) {
+        if (denominator2 != denominator1) {
             commonDenominator = denominator2 * denominator1;
             aggregatedNumerators = numerator1 * denominator2 + numerator2 * denominator1;
         }
 
-        if(aggregatedNumerators >= denominator1) {
+        if (aggregatedNumerators >= commonDenominator) {
             wholeNumber = aggregatedNumerators / commonDenominator;
             aggregatedNumerators = aggregatedNumerators % commonDenominator;
         }
 
-        for(int i = aggregatedNumerators; i > 1; i--) {
-            if(aggregatedNumerators % i == 0 && commonDenominator % i == 0) {
+        for (int i = aggregatedNumerators; i > 1; i--) {
+            if (aggregatedNumerators % i == 0 && commonDenominator % i == 0) {
                 aggregatedNumerators = aggregatedNumerators / i;
                 commonDenominator = commonDenominator / i;
                 break;
             }
         }
 
-        return ((wholeNumber > 0 ? wholeNumber + "" : "") + " " + (aggregatedNumerators > 0 ? aggregatedNumerators + "/" + commonDenominator : "")).trim();
+        return ((wholeNumber > 0 ? wholeNumber + "" : "") + " "
+                + (aggregatedNumerators > 0 ? aggregatedNumerators + "/" + commonDenominator : "")).trim();
     }
 }
